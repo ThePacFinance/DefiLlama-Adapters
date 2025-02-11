@@ -27,11 +27,10 @@ async function getTotalSupply() {
     }
 }
 
-async function fetchBackendData() {
+async function fetchUnClaimedToken() {
     try {
         const response = await axios.get("https://manager.thepac.xyz/api/unClaimed/PacARB");
-        const unclaimed = ethers.formatUnits(response.data.data.unClaimed, 18);
-        return unclaimed
+        return ethers.formatUnits(response.data.data.unClaimed, 18);
     } catch (error) {
         console.error("Error fetching backend data:", error);
         return "0";
@@ -41,7 +40,7 @@ async function fetchBackendData() {
 async function tvl(api) {
     const [supply, unClaimed] = await Promise.all([
         getTotalSupply(),
-        fetchBackendData(),
+        fetchUnClaimedToken(),
     ]);
 
     const totalTokens = Number(supply) + Number(unClaimed);
